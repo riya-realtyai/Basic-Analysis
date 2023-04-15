@@ -10,10 +10,14 @@
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/MarkerCluster.css">
         <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
-        #map {
-            width: 1397px;
-            height: 817px;
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
         }
         </style>
         <title></title>
@@ -32,20 +36,36 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
         <script src="js/leaflet.markercluster.js"></script>
         <script src="data/SubLocalityGurgaon_web_1.js"></script>
         <script src="data/Pharmacies_web_2.js"></script>
-        <script src="data/UniqueHospitalOnly_web_3.js"></script>
-        <script src="data/TopPrefrence_web_4.js"></script>
+        <script src="data/TopPrefrence_web_3.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[28.373092423509455,76.86854393071093],[28.589727826666042,77.23934931402803]]);
+        })
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
         }
         map.createPane('pane_OpenStreetMap_0');
         map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
@@ -75,56 +95,8 @@
                         <td>' + (feature.properties['500mQGIS_Affordability'] !== null ? autolinker.link(feature.properties['500mQGIS_Affordability'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Mulberry_500m_Locality Type</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Locality Type'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Locality Type'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_longitude</th>\
-                        <td>' + (feature.properties['Mulberry_500m_longitude'] !== null ? autolinker.link(feature.properties['Mulberry_500m_longitude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_latitude</th>\
-                        <td>' + (feature.properties['Mulberry_500m_latitude'] !== null ? autolinker.link(feature.properties['Mulberry_500m_latitude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Population_1km</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Population_1km'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Population_1km'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Affordability_1km</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Affordability_1km'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Affordability_1km'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_log_aff</th>\
-                        <td>' + (feature.properties['Mulberry_500m_log_aff'] !== null ? autolinker.link(feature.properties['Mulberry_500m_log_aff'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Markets</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Markets'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Markets'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Pharmacy_1km</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Pharmacy_1km'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Pharmacy_1km'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Pharmacy_brands</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Pharmacy_brands'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Pharmacy_brands'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Pharmacy_non_brands</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Pharmacy_non_brands'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Pharmacy_non_brands'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
                         <th scope="row">Mulberry_500m_CPT</th>\
                         <td>' + (feature.properties['Mulberry_500m_CPT'] !== null ? autolinker.link(feature.properties['Mulberry_500m_CPT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Clinic_1km</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Clinic_1km'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Clinic_1km'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_doctors_in_clinic</th>\
-                        <td>' + (feature.properties['Mulberry_500m_doctors_in_clinic'] !== null ? autolinker.link(feature.properties['Mulberry_500m_doctors_in_clinic'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Mulberry_500m_Pharmacy/Clinic</th>\
@@ -133,38 +105,6 @@
                     <tr>\
                         <th scope="row">Mulberry_500m_Pharmacy/Doctor</th>\
                         <td>' + (feature.properties['Mulberry_500m_Pharmacy/Doctor'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Pharmacy/Doctor'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Hospital_1km</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Hospital_1km'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Hospital_1km'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_docs_in_hospitals</th>\
-                        <td>' + (feature.properties['Mulberry_500m_docs_in_hospitals'] !== null ? autolinker.link(feature.properties['Mulberry_500m_docs_in_hospitals'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_norm pop</th>\
-                        <td>' + (feature.properties['Mulberry_500m_norm pop'] !== null ? autolinker.link(feature.properties['Mulberry_500m_norm pop'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_norm aff</th>\
-                        <td>' + (feature.properties['Mulberry_500m_norm aff'] !== null ? autolinker.link(feature.properties['Mulberry_500m_norm aff'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_norm comp</th>\
-                        <td>' + (feature.properties['Mulberry_500m_norm comp'] !== null ? autolinker.link(feature.properties['Mulberry_500m_norm comp'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_norm CPT</th>\
-                        <td>' + (feature.properties['Mulberry_500m_norm CPT'] !== null ? autolinker.link(feature.properties['Mulberry_500m_norm CPT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_norm Pharmacy/Clinic</th>\
-                        <td>' + (feature.properties['Mulberry_500m_norm Pharmacy/Clinic'] !== null ? autolinker.link(feature.properties['Mulberry_500m_norm Pharmacy/Clinic'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_norm Pharmacy/Doc_cl</th>\
-                        <td>' + (feature.properties['Mulberry_500m_norm Pharmacy/Doc_cl'] !== null ? autolinker.link(feature.properties['Mulberry_500m_norm Pharmacy/Doc_cl'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Mulberry_500m_Locality Score _ 500m</th>\
@@ -179,20 +119,8 @@
                         <td>' + (feature.properties['Mulberry_500m_Population Segment_YR'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Population Segment_YR'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Mulberry_500m_Population Segment</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Population Segment'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Population Segment'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
                         <th scope="row">Mulberry_500m_CPT Segment_YR</th>\
                         <td>' + (feature.properties['Mulberry_500m_CPT Segment_YR'] !== null ? autolinker.link(feature.properties['Mulberry_500m_CPT Segment_YR'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_CPT Segment</th>\
-                        <td>' + (feature.properties['Mulberry_500m_CPT Segment'] !== null ? autolinker.link(feature.properties['Mulberry_500m_CPT Segment'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_CPT Overall Segment</th>\
-                        <td>' + (feature.properties['Mulberry_500m_CPT Overall Segment'] !== null ? autolinker.link(feature.properties['Mulberry_500m_CPT Overall Segment'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <th scope="row">Mulberry_500m_Population</th>\
@@ -237,26 +165,6 @@
                     <tr>\
                         <th scope="row">Mulberry_500m_Prefrence</th>\
                         <td>' + (feature.properties['Mulberry_500m_Prefrence'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Prefrence'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_Brand_comp</th>\
-                        <td>' + (feature.properties['Mulberry_500m_Brand_comp'] !== null ? autolinker.link(feature.properties['Mulberry_500m_Brand_comp'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_comp_WA</th>\
-                        <td>' + (feature.properties['Mulberry_500m_comp_WA'] !== null ? autolinker.link(feature.properties['Mulberry_500m_comp_WA'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_field_45</th>\
-                        <td>' + (feature.properties['Mulberry_500m_field_45'] !== null ? autolinker.link(feature.properties['Mulberry_500m_field_45'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_field_46</th>\
-                        <td>' + (feature.properties['Mulberry_500m_field_46'] !== null ? autolinker.link(feature.properties['Mulberry_500m_field_46'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Mulberry_500m_field_47</th>\
-                        <td>' + (feature.properties['Mulberry_500m_field_47'] !== null ? autolinker.link(feature.properties['Mulberry_500m_field_47'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -462,358 +370,113 @@
         function style_Pharmacies_web_2_0() {
             return {
                 pane: 'pane_Pharmacies_web_2',
-                radius: 7.7,
+                shape: 'triangle',
+                radius: 6.0,
                 opacity: 1,
-                color: 'rgba(184,8,8,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(184,8,8,1.0)',
-                interactive: true,
-            }
-        }
-        function style_Pharmacies_web_2_1() {
-            return {
-                pane: 'pane_Pharmacies_web_2',
-                radius: 8.4,
-                opacity: 1,
-                color: 'rgba(255,0,0,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,247,0,1.0)',
-                interactive: true,
-            }
-        }
-        map.createPane('pane_Pharmacies_web_2');
-        map.getPane('pane_Pharmacies_web_2').style.zIndex = 402;
-        map.getPane('pane_Pharmacies_web_2').style['mix-blend-mode'] = 'normal';
-        var layer_Pharmacies_web_2 = new L.geoJson.multiStyle(json_Pharmacies_web_2, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_Pharmacies_web_2',
-            layerName: 'layer_Pharmacies_web_2',
-            pane: 'pane_Pharmacies_web_2',
-            onEachFeature: pop_Pharmacies_web_2,
-            pointToLayers: [function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.shapeMarker(latlng, style_Pharmacies_web_2_0(feature));
-            },function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.shapeMarker(latlng, style_Pharmacies_web_2_1(feature));
-            },
-        ]});
-        var cluster_Pharmacies_web_2 = new L.MarkerClusterGroup({showCoverageOnHover: false,
-            spiderfyDistanceMultiplier: 2});
-        cluster_Pharmacies_web_2.addLayer(layer_Pharmacies_web_2);
-
-        bounds_group.addLayer(layer_Pharmacies_web_2);
-        cluster_Pharmacies_web_2.addTo(map);
-        function pop_UniqueHospitalOnly_web_3(feature, layer) {
-            var popupContent = '<table>\
-                    <tr>\
-                        <th scope="row">Clinic Url</th>\
-                        <td>' + (feature.properties['Clinic Url'] !== null ? autolinker.link(feature.properties['Clinic Url'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Page Url</th>\
-                        <td>' + (feature.properties['Page Url'] !== null ? autolinker.link(feature.properties['Page Url'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Clinic Name</th>\
-                        <td>' + (feature.properties['Clinic Name'] !== null ? autolinker.link(feature.properties['Clinic Name'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">No of Doctors</th>\
-                        <td>' + (feature.properties['No of Doctors'] !== null ? autolinker.link(feature.properties['No of Doctors'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Address</th>\
-                        <td>' + (feature.properties['Address'] !== null ? autolinker.link(feature.properties['Address'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Type of Clinic</th>\
-                        <td>' + (feature.properties['Type of Clinic'] !== null ? autolinker.link(feature.properties['Type of Clinic'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">No of Stories</th>\
-                        <td>' + (feature.properties['No of Stories'] !== null ? autolinker.link(feature.properties['No of Stories'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Rating</th>\
-                        <td>' + (feature.properties['Rating'] !== null ? autolinker.link(feature.properties['Rating'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Timing</th>\
-                        <td>' + (feature.properties['Timing'] !== null ? autolinker.link(feature.properties['Timing'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Latitude</th>\
-                        <td>' + (feature.properties['Latitude'] !== null ? autolinker.link(feature.properties['Latitude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Longitude</th>\
-                        <td>' + (feature.properties['Longitude'] !== null ? autolinker.link(feature.properties['Longitude'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Locality</th>\
-                        <td>' + (feature.properties['Locality'] !== null ? autolinker.link(feature.properties['Locality'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">temp</th>\
-                        <td>' + (feature.properties['temp'] !== null ? autolinker.link(feature.properties['temp'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">reviews</th>\
-                        <td>' + (feature.properties['reviews'] !== null ? autolinker.link(feature.properties['reviews'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">other_specifications</th>\
-                        <td>' + (feature.properties['other_specifications'] !== null ? autolinker.link(feature.properties['other_specifications'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Established year</th>\
-                        <td>' + (feature.properties['Established year'] !== null ? autolinker.link(feature.properties['Established year'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">total beds</th>\
-                        <td>' + (feature.properties['total beds'] !== null ? autolinker.link(feature.properties['total beds'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">total doctors</th>\
-                        <td>' + (feature.properties['total doctors'] !== null ? autolinker.link(feature.properties['total doctors'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">accessibility</th>\
-                        <td>' + (feature.properties['accessibility'] !== null ? autolinker.link(feature.properties['accessibility'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">address_1</th>\
-                        <td>' + (feature.properties['address_1'] !== null ? autolinker.link(feature.properties['address_1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">timing_1</th>\
-                        <td>' + (feature.properties['timing_1'] !== null ? autolinker.link(feature.properties['timing_1'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">total ambulance</th>\
-                        <td>' + (feature.properties['total ambulance'] !== null ? autolinker.link(feature.properties['total ambulance'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">mode of payment</th>\
-                        <td>' + (feature.properties['mode of payment'] !== null ? autolinker.link(feature.properties['mode of payment'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">procedures</th>\
-                        <td>' + (feature.properties['procedures'] !== null ? autolinker.link(feature.properties['procedures'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Doctor_info</th>\
-                        <td>' + (feature.properties['Doctor_info'] !== null ? autolinker.link(feature.properties['Doctor_info'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        function style_UniqueHospitalOnly_web_3_0() {
-            return {
-                pane: 'pane_UniqueHospitalOnly_web_3',
-                radius: 6.4,
-                opacity: 1,
-                color: 'rgba(200,45,45,1.0)',
+                color: 'rgba(128,17,25,1.0)',
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
                 weight: 2.0,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(200,45,45,1.0)',
+                fillColor: 'rgba(219,30,42,1.0)',
                 interactive: true,
             }
         }
-        function style_UniqueHospitalOnly_web_3_1() {
-            return {
-                pane: 'pane_UniqueHospitalOnly_web_3',
-                radius: 3.6923,
-                opacity: 1,
-                color: 'rgba(255,255,255,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1.0,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,255,255,1.0)',
-                interactive: true,
-            }
-        }
-        map.createPane('pane_UniqueHospitalOnly_web_3');
-        map.getPane('pane_UniqueHospitalOnly_web_3').style.zIndex = 403;
-        map.getPane('pane_UniqueHospitalOnly_web_3').style['mix-blend-mode'] = 'normal';
-        var layer_UniqueHospitalOnly_web_3 = new L.geoJson.multiStyle(json_UniqueHospitalOnly_web_3, {
+        map.createPane('pane_Pharmacies_web_2');
+        map.getPane('pane_Pharmacies_web_2').style.zIndex = 402;
+        map.getPane('pane_Pharmacies_web_2').style['mix-blend-mode'] = 'normal';
+        var layer_Pharmacies_web_2 = new L.geoJson(json_Pharmacies_web_2, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_UniqueHospitalOnly_web_3',
-            layerName: 'layer_UniqueHospitalOnly_web_3',
-            pane: 'pane_UniqueHospitalOnly_web_3',
-            onEachFeature: pop_UniqueHospitalOnly_web_3,
-            pointToLayers: [function (feature, latlng) {
+            dataVar: 'json_Pharmacies_web_2',
+            layerName: 'layer_Pharmacies_web_2',
+            pane: 'pane_Pharmacies_web_2',
+            onEachFeature: pop_Pharmacies_web_2,
+            pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.shapeMarker(latlng, style_UniqueHospitalOnly_web_3_0(feature));
-            },function (feature, latlng) {
-                var context = {
-                    feature: feature,
-                    variables: {}
-                };
-                return L.shapeMarker(latlng, style_UniqueHospitalOnly_web_3_1(feature));
+                return L.shapeMarker(latlng, style_Pharmacies_web_2_0(feature));
             },
-        ]});
-        bounds_group.addLayer(layer_UniqueHospitalOnly_web_3);
-        map.addLayer(layer_UniqueHospitalOnly_web_3);
-        function pop_TopPrefrence_web_4(feature, layer) {
+        });
+        var cluster_Pharmacies_web_2 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Pharmacies_web_2.addLayer(layer_Pharmacies_web_2);
+
+        bounds_group.addLayer(layer_Pharmacies_web_2);
+        cluster_Pharmacies_web_2.addTo(map);
+        function pop_TopPrefrence_web_3(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">LocalityList_LocName</th>\
-                        <td>' + (feature.properties['LocalityList_LocName'] !== null ? autolinker.link(feature.properties['LocalityList_LocName'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['LocalityLi'] !== null ? autolinker.link(feature.properties['LocalityLi'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">LocalityList_Type</th>\
-                        <td>' + (feature.properties['LocalityList_Type'] !== null ? autolinker.link(feature.properties['LocalityList_Type'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Locality_1'] !== null ? autolinker.link(feature.properties['Locality_1'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">longitude</th>\
-                        <td>' + (feature.properties['longitude'] !== null ? autolinker.link(feature.properties['longitude'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_CPT'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_CPT'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">latitude</th>\
-                        <td>' + (feature.properties['latitude'] !== null ? autolinker.link(feature.properties['latitude'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Pharmacy/Clinic'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Pharmacy/Clinic'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">population</th>\
-                        <td>' + (feature.properties['population'] !== null ? autolinker.link(feature.properties['population'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Pharmacy/Doctor'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Pharmacy/Doctor'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">affordability</th>\
-                        <td>' + (feature.properties['affordability'] !== null ? autolinker.link(feature.properties['affordability'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Locality Score _ 500m'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Locality Score _ 500m'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">log_aff</th>\
-                        <td>' + (feature.properties['log_aff'] !== null ? autolinker.link(feature.properties['log_aff'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Rank'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Rank'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Pharmacy_1km</th>\
-                        <td>' + (feature.properties['Pharmacy_1km'] !== null ? autolinker.link(feature.properties['Pharmacy_1km'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Population Segment_YR'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Population Segment_YR'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">CPT</th>\
-                        <td>' + (feature.properties['CPT'] !== null ? autolinker.link(feature.properties['CPT'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_CPT Segment_YR'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_CPT Segment_YR'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Clinic_1km</th>\
-                        <td>' + (feature.properties['Clinic_1km'] !== null ? autolinker.link(feature.properties['Clinic_1km'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Population'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Population'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">docs_in_clinic</th>\
-                        <td>' + (feature.properties['docs_in_clinic'] !== null ? autolinker.link(feature.properties['docs_in_clinic'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Affordability'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Affordability'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Pharmacy/Doctor_cli</th>\
-                        <td>' + (feature.properties['Pharmacy/Doctor_cli'] !== null ? autolinker.link(feature.properties['Pharmacy/Doctor_cli'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Pharmacy'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Pharmacy'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Hospital_1km</th>\
-                        <td>' + (feature.properties['Hospital_1km'] !== null ? autolinker.link(feature.properties['Hospital_1km'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Pharmacy_brand'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Pharmacy_brand'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">QGIS_hosp</th>\
-                        <td>' + (feature.properties['QGIS_hosp'] !== null ? autolinker.link(feature.properties['QGIS_hosp'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Pharmacy_non_brand'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Pharmacy_non_brand'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">docs_in_hospitals</th>\
-                        <td>' + (feature.properties['docs_in_hospitals'] !== null ? autolinker.link(feature.properties['docs_in_hospitals'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_markets_1'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_markets_1'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">Pharmacy/Clinic</th>\
-                        <td>' + (feature.properties['Pharmacy/Clinic'] !== null ? autolinker.link(feature.properties['Pharmacy/Clinic'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Count of Clinics'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Count of Clinics'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">norm pop</th>\
-                        <td>' + (feature.properties['norm pop'] !== null ? autolinker.link(feature.properties['norm pop'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Count of docs in Clinics'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Count of docs in Clinics'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">norm aff</th>\
-                        <td>' + (feature.properties['norm aff'] !== null ? autolinker.link(feature.properties['norm aff'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Count of Hospitals'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Count of Hospitals'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">norm comp</th>\
-                        <td>' + (feature.properties['norm comp'] !== null ? autolinker.link(feature.properties['norm comp'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Count of docs in hospitals'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Count of docs in hospitals'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <th scope="row">norm CPT</th>\
-                        <td>' + (feature.properties['norm CPT'] !== null ? autolinker.link(feature.properties['norm CPT'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">norm Pharmacy/Clinic</th>\
-                        <td>' + (feature.properties['norm Pharmacy/Clinic'] !== null ? autolinker.link(feature.properties['norm Pharmacy/Clinic'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">norm Pharmacy/Doc_cl</th>\
-                        <td>' + (feature.properties['norm Pharmacy/Doc_cl'] !== null ? autolinker.link(feature.properties['norm Pharmacy/Doc_cl'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Scoring</th>\
-                        <td>' + (feature.properties['Scoring'] !== null ? autolinker.link(feature.properties['Scoring'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Rank</th>\
-                        <td>' + (feature.properties['Rank'] !== null ? autolinker.link(feature.properties['Rank'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Pharmacy_500</th>\
-                        <td>' + (feature.properties['Pharmacy_500'] !== null ? autolinker.link(feature.properties['Pharmacy_500'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Clinic_500m</th>\
-                        <td>' + (feature.properties['Clinic_500m'] !== null ? autolinker.link(feature.properties['Clinic_500m'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Hospital_500</th>\
-                        <td>' + (feature.properties['Hospital_500'] !== null ? autolinker.link(feature.properties['Hospital_500'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Pharmacy_1.5</th>\
-                        <td>' + (feature.properties['Pharmacy_1.5'] !== null ? autolinker.link(feature.properties['Pharmacy_1.5'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Clinic_1.5km</th>\
-                        <td>' + (feature.properties['Clinic_1.5km'] !== null ? autolinker.link(feature.properties['Clinic_1.5km'].toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <th scope="row">Hospital_1.5</th>\
-                        <td>' + (feature.properties['Hospital_1.5'] !== null ? autolinker.link(feature.properties['Hospital_1.5'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['Mulberry Location Analysis_500m_Prefrence'] !== null ? autolinker.link(feature.properties['Mulberry Location Analysis_500m_Prefrence'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_TopPrefrence_web_4_0() {
+        function style_TopPrefrence_web_3_0() {
             return {
-                pane: 'pane_TopPrefrence_web_4',
+                pane: 'pane_TopPrefrence_web_3',
                 radius: 13.2,
                 stroke: false,
                 fill: true,
@@ -822,9 +485,9 @@
                 interactive: true,
             }
         }
-        function style_TopPrefrence_web_4_1() {
+        function style_TopPrefrence_web_3_1() {
             return {
-                pane: 'pane_TopPrefrence_web_4',
+                pane: 'pane_TopPrefrence_web_3',
                 radius: 11.0,
                 stroke: false,
                 fill: true,
@@ -833,46 +496,56 @@
                 interactive: true,
             }
         }
-        function style_TopPrefrence_web_4_2() {
+        function style_TopPrefrence_web_3_2() {
             return {
-                pane: 'pane_TopPrefrence_web_4',
+                pane: 'pane_TopPrefrence_web_3',
                 interactive: true,
             }
         }
-        map.createPane('pane_TopPrefrence_web_4');
-        map.getPane('pane_TopPrefrence_web_4').style.zIndex = 404;
-        map.getPane('pane_TopPrefrence_web_4').style['mix-blend-mode'] = 'normal';
-        var layer_TopPrefrence_web_4 = new L.geoJson.multiStyle(json_TopPrefrence_web_4, {
+        map.createPane('pane_TopPrefrence_web_3');
+        map.getPane('pane_TopPrefrence_web_3').style.zIndex = 403;
+        map.getPane('pane_TopPrefrence_web_3').style['mix-blend-mode'] = 'normal';
+        var layer_TopPrefrence_web_3 = new L.geoJson.multiStyle(json_TopPrefrence_web_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_TopPrefrence_web_4',
-            layerName: 'layer_TopPrefrence_web_4',
-            pane: 'pane_TopPrefrence_web_4',
-            onEachFeature: pop_TopPrefrence_web_4,
+            dataVar: 'json_TopPrefrence_web_3',
+            layerName: 'layer_TopPrefrence_web_3',
+            pane: 'pane_TopPrefrence_web_3',
+            onEachFeature: pop_TopPrefrence_web_3,
             pointToLayers: [function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_TopPrefrence_web_4_0(feature));
+                return L.circleMarker(latlng, style_TopPrefrence_web_3_0(feature));
             },function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_TopPrefrence_web_4_1(feature));
+                return L.circleMarker(latlng, style_TopPrefrence_web_3_1(feature));
             },function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_TopPrefrence_web_4_2(feature));
+                return L.circleMarker(latlng, style_TopPrefrence_web_3_2(feature));
             },
         ]});
-        bounds_group.addLayer(layer_TopPrefrence_web_4);
-        map.addLayer(layer_TopPrefrence_web_4);
+        bounds_group.addLayer(layer_TopPrefrence_web_3);
+        map.addLayer(layer_TopPrefrence_web_3);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/TopPrefrence_web_4.png" /> Top Prefrence_web': layer_TopPrefrence_web_4,'<img src="legend/UniqueHospitalOnly_web_3.png" /> UniqueHospitalOnly_web': layer_UniqueHospitalOnly_web_3,'<img src="legend/Pharmacies_web_2.png" /> Pharmacies_web': cluster_Pharmacies_web_2,'SubLocalityGurgaon_web<br /><table><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank1370.png" /></td><td>Rank 1 - 37</td></tr><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank37721.png" /></td><td>Rank 37 - 72</td></tr><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank721122.png" /></td><td>Rank 72 - 112</td></tr><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank1121473.png" /></td><td>Rank 112 - 147</td></tr><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank1471824.png" /></td><td>Rank 147 - 182</td></tr></table>': layer_SubLocalityGurgaon_web_1,"OpenStreetMap": layer_OpenStreetMap_0,},{collapsed:false}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/TopPrefrence_web_3.png" /> Top Prefrence_web': layer_TopPrefrence_web_3,'<img src="legend/Pharmacies_web_2.png" /> Pharmacies_web': cluster_Pharmacies_web_2,'SubLocalityGurgaon_web<br /><table><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank1370.png" /></td><td>Rank 1 - 37</td></tr><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank37721.png" /></td><td>Rank 37 - 72</td></tr><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank721122.png" /></td><td>Rank 72 - 112</td></tr><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank1121473.png" /></td><td>Rank 112 - 147</td></tr><tr><td style="text-align: center;"><img src="legend/SubLocalityGurgaon_web_1_Rank1471824.png" /></td><td>Rank 147 - 182</td></tr></table>': layer_SubLocalityGurgaon_web_1,"OpenStreetMap": layer_OpenStreetMap_0,},{collapsed:false}).addTo(map);
         setBounds();
         var i = 0;
         layer_SubLocalityGurgaon_web_1.eachLayer(function(layer) {
@@ -888,27 +561,27 @@
               i++;
         });
         var i = 0;
-        layer_UniqueHospitalOnly_web_3.eachLayer(function(layer) {
+        layer_Pharmacies_web_2.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['Clinic Name'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['Clinic Name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_UniqueHospitalOnly_web_3'});
+            layer.bindTooltip((layer.feature.properties['name'] !== null?String('<div style="color: #323232; font-size: 8pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Pharmacies_web_2'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
               addLabel(layer, i);
               i++;
         });
-        resetLabels([layer_SubLocalityGurgaon_web_1,layer_Pharmacies_web_2,layer_UniqueHospitalOnly_web_3,layer_TopPrefrence_web_4]);
+        resetLabels([layer_SubLocalityGurgaon_web_1,layer_Pharmacies_web_2]);
         map.on("zoomend", function(){
-            resetLabels([layer_SubLocalityGurgaon_web_1,layer_Pharmacies_web_2,layer_UniqueHospitalOnly_web_3,layer_TopPrefrence_web_4]);
+            resetLabels([layer_SubLocalityGurgaon_web_1,layer_Pharmacies_web_2]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_SubLocalityGurgaon_web_1,layer_Pharmacies_web_2,layer_UniqueHospitalOnly_web_3,layer_TopPrefrence_web_4]);
+            resetLabels([layer_SubLocalityGurgaon_web_1,layer_Pharmacies_web_2]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_SubLocalityGurgaon_web_1,layer_Pharmacies_web_2,layer_UniqueHospitalOnly_web_3,layer_TopPrefrence_web_4]);
+            resetLabels([layer_SubLocalityGurgaon_web_1,layer_Pharmacies_web_2]);
         });
         </script>
     </body>
