@@ -12,9 +12,11 @@
         <link rel="stylesheet" href="css/MarkerCluster.Default.css">
         <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
         <style>
-        #map {
-            width: 1490px;
-            height: 856px;
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
         }
         </style>
         <title></title>
@@ -53,12 +55,13 @@
         }
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[28.225290671614292,76.47126074299571],[28.973478777509374,77.95607504821699]]);
+        }).fitBounds([[28.355430172928056,76.7872234645105],[28.729729433200255,77.52963061712114]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
+            map.setMaxBounds(map.getBounds());
         }
         map.createPane('pane_OpenStreetMap_0');
         map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
@@ -110,7 +113,7 @@
                 case 'ANOKHI':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -126,7 +129,7 @@
                 case 'Fab India':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -142,7 +145,7 @@
                 case 'Fabindia Home Furniture':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -158,7 +161,7 @@
                 case 'Fabindia Home Store':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -174,7 +177,7 @@
                 case 'House of Fett':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -190,7 +193,7 @@
                 case 'House of Masaba':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -206,7 +209,7 @@
                 case 'MULMUL STORE':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -222,7 +225,7 @@
                 case 'Ritu Kumar':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -238,7 +241,7 @@
                 case 'Sureena Chowdhri':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -254,7 +257,7 @@
                 case 'Tashaindia':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -270,7 +273,7 @@
                 case 'Yam India':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -286,7 +289,7 @@
                 case 'yavi':
                     return {
                 pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -296,22 +299,6 @@
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(99,17,222,1.0)',
-                interactive: true,
-            }
-                    break;
-                default:
-                    return {
-                pane: 'pane_ComplimentaryStores_1',
-                radius: 5.199999999999999,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(228,0,4,1.0)',
                 interactive: true,
             }
                     break;
@@ -376,7 +363,7 @@
         function style_Closed_2_0() {
             return {
                 pane: 'pane_Closed_2',
-                radius: 5.199999999999999,
+                radius: 5.2,
                 opacity: 1,
                 color: 'rgba(35,35,35,1.0)',
                 dashArray: '',
@@ -385,8 +372,8 @@
                 weight: 1,
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(255,86,67,1.0)',
-                interactive: true,
+                fillColor: 'rgba(255,0,4,1.0)',
+                interactive: false,
             }
         }
         map.createPane('pane_Closed_2');
@@ -394,7 +381,7 @@
         map.getPane('pane_Closed_2').style['mix-blend-mode'] = 'normal';
         var layer_Closed_2 = new L.geoJson(json_Closed_2, {
             attribution: '',
-            interactive: true,
+            interactive: false,
             dataVar: 'json_Closed_2',
             layerName: 'layer_Closed_2',
             pane: 'pane_Closed_2',
@@ -420,8 +407,21 @@
         document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
         .title += 'Search for a place';
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/Closed_2.png" /> Closed': layer_Closed_2,'Complimentary Stores<br /><table><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_ANOKHI0.png" /></td><td>ANOKHI</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_FabIndia1.png" /></td><td>Fab India</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_FabindiaHomeFurniture2.png" /></td><td>Fabindia Home Furniture</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_FabindiaHomeStore3.png" /></td><td>Fabindia Home Store</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_HouseofFett4.png" /></td><td>House of Fett</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_HouseofMasaba5.png" /></td><td>House of Masaba</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_MULMULSTORE6.png" /></td><td>MULMUL STORE</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_RituKumar7.png" /></td><td>Ritu Kumar</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_SureenaChowdhri8.png" /></td><td>Sureena Chowdhri</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_Tashaindia9.png" /></td><td>Tashaindia</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_YamIndia10.png" /></td><td>Yam India</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_yavi11.png" /></td><td>yavi</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_12.png" /></td><td></td></tr></table>': cluster_ComplimentaryStores_1,"OpenStreetMap": layer_OpenStreetMap_0,},{collapsed:false}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Closed_2.png" /> Closed': layer_Closed_2,'Complimentary Stores<br /><table><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_ANOKHI0.png" /></td><td>ANOKHI</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_FabIndia1.png" /></td><td>Fab India</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_FabindiaHomeFurniture2.png" /></td><td>Fabindia Home Furniture</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_FabindiaHomeStore3.png" /></td><td>Fabindia Home Store</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_HouseofFett4.png" /></td><td>House of Fett</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_HouseofMasaba5.png" /></td><td>House of Masaba</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_MULMULSTORE6.png" /></td><td>MULMUL STORE</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_RituKumar7.png" /></td><td>Ritu Kumar</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_SureenaChowdhri8.png" /></td><td>Sureena Chowdhri</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_Tashaindia9.png" /></td><td>Tashaindia</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_YamIndia10.png" /></td><td>Yam India</td></tr><tr><td style="text-align: center;"><img src="legend/ComplimentaryStores_1_yavi11.png" /></td><td>yavi</td></tr></table>': cluster_ComplimentaryStores_1,"OpenStreetMap": layer_OpenStreetMap_0,},{collapsed:false}).addTo(map);
         setBounds();
+        var i = 0;
+        layer_ComplimentaryStores_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Name'] !== null?String('<div style="color: #000000; font-size: 11pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['Name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_ComplimentaryStores_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
         resetLabels([layer_ComplimentaryStores_1,layer_Closed_2]);
         map.on("zoomend", function(){
             resetLabels([layer_ComplimentaryStores_1,layer_Closed_2]);
